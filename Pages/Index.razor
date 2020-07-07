@@ -1,7 +1,29 @@
 ﻿@page "/"
+@using KirillPlusDota.Data
+@inject DotaService DotaS
 
-<h1>Hello, world!</h1>
+<h1>Кирилл сейчас в доте?</h1>
+<p class="display-4" style="color:@color">@_game</p>
 
-Welcome to your new app.
+@code{
+    private string _game = "Хер пойми чё он делает ¯\\_(ツ)_/¯";
+    private string color = "darkred";
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+    protected override async Task OnInitializedAsync()
+    {
+        string game = await DotaS.GetGame();
+
+        if (!string.IsNullOrEmpty(game))
+        {
+            if (game == "Dota 2")
+            {
+                _game = "Да!";
+                color = "darkgreen";
+            }
+            else
+            {
+                _game = $"Нет, он в {game}";
+            }
+        }
+    }
+}
