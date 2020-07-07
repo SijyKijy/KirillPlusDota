@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30225.117
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KirillPlusDota", "KirillPlusDota.csproj", "{DE4B22CB-C3FC-4D9B-A2D2-8DC646E103EA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DE4B22CB-C3FC-4D9B-A2D2-8DC646E103EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE4B22CB-C3FC-4D9B-A2D2-8DC646E103EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE4B22CB-C3FC-4D9B-A2D2-8DC646E103EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE4B22CB-C3FC-4D9B-A2D2-8DC646E103EA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {460902E2-6009-4EBE-ADBB-E19DD22C7CE9}
+	EndGlobalSection
+EndGlobal
