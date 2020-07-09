@@ -2,28 +2,42 @@
 @using KirillPlusDota.Data
 @inject DotaService DotaS
 
-<h1>Кирилл сейчас в доте?</h1>
-<p class="display-4" style="color:@color">@_game</p>
+    <h1>Кирилл сейчас в доте?</h1>
+    <p class="display-4" style="color:@color">@_game</p>
 
-@code{
-    private string _game = "Хер пойми чё он делает ¯\\_(ツ)_/¯";
-    private string color = "darkred";
+    @code{
+        private string _game = "";
+        private string color = "darkred";
 
-    protected override async Task OnInitializedAsync()
-    {
-        string game = await DotaS.GetGame();
-
-        if (!string.IsNullOrEmpty(game))
+        protected override async Task OnInitializedAsync()
         {
-            if (game == "Dota 2")
+            string game = await DotaS.GetGame();
+
+            if (!string.IsNullOrEmpty(game))
             {
-                _game = "Да!";
-                color = "darkgreen";
+                switch (game)
+                {
+                    case "Dota 2":
+                        {
+                            color = "darkgreen";
+                            _game = "Да!";
+                            break;
+                        }
+                    case "Sleep":
+                        {
+                            _game = "Скорее всего спит!";
+                            break;
+                        }
+                    default:
+                        {
+                            _game = $"Нет, он в {game}";
+                            break;
+                        }
+                }
             }
             else
             {
-                _game = $"Нет, он в {game}";
+                _game = "Хер пойми чё он делает ¯\\_(ツ)_/¯";
             }
         }
     }
-}

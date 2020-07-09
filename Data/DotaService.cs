@@ -18,7 +18,7 @@ namespace KirillPlusDota.Data
                     string json = await response.Content.ReadAsStringAsync();
                     int state = (int)JObject.Parse(json)["response"]["players"][0]["personastate"];
 
-                    if (state == 0) return "Скорее всего спит";
+                    if (state == 0) return "Sleep";
                     if (json.Contains("gameextrainfo")) return JObject.Parse(json)["response"]["players"][0]["gameextrainfo"].ToString();
                 }
 
