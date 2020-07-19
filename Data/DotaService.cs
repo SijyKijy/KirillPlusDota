@@ -5,24 +5,21 @@ using KirillPlusDota.Properties;
 
 namespace KirillPlusDota.Data
 {
-    public class DotaService
+    internal class DotaService
     {
-        public async Task<string> GetGame()
+        public async Task<SteamData> GetData(long id)
         {
             using (HttpClient client = new HttpClient())
             {
-                var response = await client.GetAsync($"http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={Resources.Token}&steamids=76561198034591874");
+                var response = await client.GetAsync($"http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={Resources.Token}&steamids={id}");
 
-                if (response.IsSuccessStatusCode)
+                if (response.IsSuccessStatusCode && response.Content.Headers.ContentLength > 47) // 47 byte - empty result
                 {
                     string json = await response.Content.ReadAsStringAsync();
-                    int state = (int)JObject.Parse(json)["response"]["players"][0]["personastate"];
-
-                    if (state == 0) return "Sleep";
-                    if (json.Contains("gameextrainfo")) return JObject.Parse(json)["response"]["players"][0]["gameextrainfo"].ToString();
+                    return JObject.Parse(json)["response"]["players"][0].ToObject<SteamData>();
                 }
 
-                return string.Empty;
+                return null;
             }
         }
     }

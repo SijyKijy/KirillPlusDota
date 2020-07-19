@@ -1,43 +1,68 @@
 ﻿@page "/"
+@page "/{id:long}"
 @using KirillPlusDota.Data
-@inject DotaService DotaS
+@inject DotaService DotaService
 
-    <h1>Кирилл сейчас в доте?</h1>
-    <p class="display-4" style="color:@color">@_game</p>
+@if (data != null)
+{
+    <h1>@name сейчас в доте?</h1>
+    <p class="display-4" style="color:@color">@status</p>
+}
+else if (isInit && data == null)
+{
+    <h1>Ты уверен, что пользователь существует?</h1>
+    <p class="display-1">🤔</p>
+}
+else
+{
+    <h1>ЗагрузAssЧка...</h1>
+}
 
-    @code{
-        private string _game = "";
-        private string color = "darkred";
+@code{
+    [Parameter]
+    public long Id { get; set; }
+    private SteamData data { get; set; }
 
-        protected override async Task OnInitializedAsync()
+    private string status = "Хер пойми чё он делает ¯\\_(ツ)_/¯";
+    private string name = "Кирилл";
+    private string color = "darkred";
+    bool isInit = false;
+
+    private readonly long kirillID = Convert.ToInt64(KirillPlusDota.Properties.Resources.Id);
+
+    protected override async Task OnInitializedAsync()
+    {
+        Id = Id == 0 ? kirillID : Id;
+
+        data = await DotaService.GetData(Id);
+
+        if (data != null)
         {
-            string game = await DotaS.GetGame();
-
-            if (!string.IsNullOrEmpty(game))
-            {
-                switch (game)
-                {
-                    case "Dota 2":
-                        {
-                            color = "darkgreen";
-                            _game = "Да!";
-                            break;
-                        }
-                    case "Sleep":
-                        {
-                            _game = "Скорее всего спит!";
-                            break;
-                        }
-                    default:
-                        {
-                            _game = $"Нет, он в {game}";
-                            break;
-                        }
-                }
-            }
-            else
-            {
-                _game = "Хер пойми чё он делает ¯\\_(ツ)_/¯";
-            }
+            status = GetStatus();
+            name = GetName();
         }
+
+        isInit = true;
     }
+
+    private string GetName() => Id == kirillID ? "Кирилл" : data.Name;
+
+    private string GetStatus()
+    {
+        if (!string.IsNullOrEmpty(data.Game))
+        {
+            if (data.Game == "Dota 2")
+            {
+                color = "darkgreen";
+                return "Да";
+            }
+
+            return $"Нет, он в {data.Game}";
+        }
+
+        if (data.State == State.Offline || data.State == State.Away)
+            return "Скорее всего спит";
+
+        return "Хер пойми чё он делает ¯\\_(ツ)_/¯";
+    }
+}
